@@ -11,4 +11,11 @@ public class MainClassTest {
                 14, MainClass.getLocalNumber());
     }
 
+    @Test
+    public void testGetClassNumber(){
+        Assert.assertTrue("MainClass.getClassNumber() has returned response which <= 45",
+                MainClass.getClassNumber() > 45 );
+
+    }
+
 }
