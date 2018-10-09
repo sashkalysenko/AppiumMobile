@@ -18,4 +18,14 @@ public class MainClassTest {
 
     }
 
+    @Test
+    public void testGetClassString(){
+        if(MainClass.getClassString().contains("hello") || MainClass.getClassString().contains("Hello")){
+        }
+        else{
+            Assert.fail("MainClass.class_string doesn't contain any of the following substrings: 'hello', 'Hello'");
+        }
+
+    }
+
 }
