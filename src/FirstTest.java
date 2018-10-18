@@ -160,4 +160,15 @@ public class FirstTest {
         element.clear();
         return element;
     }
+
+    private void verifyDefaultSearchValue()
+    {
+        WebElement search_field_element = waitForElementPresent(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Search field is not displayed",
+                5
+        );
+        String actual_default_value = search_field_element.getAttribute("text");
+        Assert.assertEquals("Default 'Search…' value is not displayed", "Search…", actual_default_value);
+    }
 }
