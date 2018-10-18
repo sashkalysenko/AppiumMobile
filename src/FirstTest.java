@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import java.util.List;
 import java.net.URL;
 
 public class FirstTest {
@@ -119,6 +119,29 @@ public class FirstTest {
         Assert.assertEquals("Unexpected title","Java (programming language)", article_title);
     }
 
+    @Test
+    public void testSearchArticles()
+    {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find Search Wikipedia input",
+                5
+        );
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Futurama",
+                "Can't find search input",
+                5
+        );
+        Assert.assertTrue("Found less than 2 articles", getAmountFoundArticles() >= 1);
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Can't find X-button",
+                5
+        );
+        Assert.assertTrue("Search list is not clear", getAmountFoundArticles() == 0);
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeOutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
@@ -170,5 +193,11 @@ public class FirstTest {
         );
         String actual_default_value = search_field_element.getAttribute("text");
         Assert.assertEquals("Default 'Search…' value is not displayed", "Search…", actual_default_value);
+    }
+
+    private int getAmountFoundArticles()
+    {
+        List<WebElement> found_elements = driver.findElements(By.id("org.wikipedia:id/page_list_item_container"));
+        return found_elements.size();
     }
 }
