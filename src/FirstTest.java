@@ -9,6 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.net.URL;
 
@@ -142,6 +144,30 @@ public class FirstTest {
         Assert.assertTrue("Search list is not clear", getAmountFoundArticles() == 0);
     }
 
+    @Test
+    public void testCheckWordMatchedInSearch()
+    {
+        String search_query = "Barcelona";
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find Search Wikipedia input",
+                5
+        );
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_query,
+                "Can't find search input",
+                5
+        );
+        List<String> articles = getArticles();
+        for(int i=0; i<articles.size(); i++)
+        {
+            Assert.assertTrue(
+                    "Search query " + search_query + " not found in article",
+                    articles.get(i).toLowerCase().contains(search_query.toLowerCase()));
+        }
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeOutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
@@ -199,5 +225,16 @@ public class FirstTest {
     {
         List<WebElement> found_elements = driver.findElements(By.id("org.wikipedia:id/page_list_item_container"));
         return found_elements.size();
+    }
+
+    private List<String> getArticles()
+    {
+        List<String> articles = new ArrayList<String>();
+        List<WebElement> article_elements = driver.findElements(By.id("org.wikipedia:id/page_list_item_title"));
+        for(int i=0; i<article_elements.size(); i++)
+        {
+            articles.add(i, article_elements.get(i).getAttribute("text"));
+        }
+        return articles;
     }
 }
