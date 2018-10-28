@@ -210,15 +210,11 @@ public class FirstTest {
         return element;
     }
 
-    private void verifyDefaultSearchValue()
+    private void verifyTextInWebElement(WebElement element, String text)
     {
-        WebElement search_field_element = waitForElementPresent(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Search field is not displayed",
-                5
-        );
-        String actual_default_value = search_field_element.getAttribute("text");
-        Assert.assertEquals("Default 'Search…' value is not displayed", "Search…", actual_default_value);
+        String actual_value = element.getAttribute("text");
+        Assert.assertTrue("Web element " + element + " doesn't contain the text - " + text,
+                actual_value == text);
     }
 
     private int getAmountFoundArticles()
